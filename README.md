@@ -1,12 +1,13 @@
 ### prerequisites
 - your EC2 instances most have a `role` tag, by which you can ask for them.
 - you should have the instances `.pem` key at `~/.ssh/keypair.pem`.
-- you should have a `~/.aws/keys` with the following content: ```
-  {  
-      "AWSAccessKeyId": "<access-key>",
-      "AWSSecretKey": "<secret-key>",
-      "region": "<regaion>"
-  }
+- you should have a `~/.aws/keys` with the following content: `
+    {  
+        "AWSAccessKeyId": "<access-key>",
+        "AWSSecretKey": "<secret-key>",
+        "region": "<regaion>"
+    }
+`
 - your remote user-name is `ubuntu` (:)).
 
 ### install
