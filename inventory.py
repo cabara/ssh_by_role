@@ -4,7 +4,8 @@ scripts expects json file at: `~/.aws/keys`
 with content:
     {  
           "AWSAccessKeyId": "fjasdfjdkslfjaldslkfa",
-          "AWSSecretKey": "jfdajlfdksjaljfajklfdjklfdas"
+          "AWSSecretKey": "jfdajlfdksjaljfajklfdjklfdas",
+          "region": "us-west-2"
     }
 """
 
@@ -45,7 +46,7 @@ def get_inventory():
     aws_keys = open_config_file(aws_keys_path)
 
     conn = boto.ec2.connect_to_region(
-        "us-west-2",
+        aws_keys['region'],
         aws_access_key_id=aws_keys['AWSAccessKeyId'],
         aws_secret_access_key=aws_keys['AWSSecretKey']
     )
