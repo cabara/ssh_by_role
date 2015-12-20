@@ -11,7 +11,7 @@ parser.add_argument('--no-ssh', action='store_true')
 args = parser.parse_args()
 
 home_path = os.environ['HOME']
-inventory_script = os.path.join(home_path, '.scripts/inventory.py')
+inventory_script = os.path.join(home_path, '.scripts/ssh_by_role/inventory.py')
 run_inventory = subprocess.Popen([inventory_script], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 string_inventory, error= run_inventory.communicate('S\nL\n')
 inventory = json.loads(string_inventory.decode('utf-8'))
