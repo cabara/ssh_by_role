@@ -1,5 +1,21 @@
 #!/usr/bin/python
-
+"""
+script excpects to have the following json format files:
+    - ~/.aws/keys:
+        {  
+          "AWSAccessKeyId": "fjasdfjdkslfjaldslkfa",
+          "AWSSecretKey": "jfdajlfdksjaljfajklfdjklfdas"
+        }
+    - .slack:
+        {
+            "token": "sdfjkkldjsafjklfdsjkladfsjklfd"
+        }
+    - .bitbucket/credentials:
+        {
+            "user": "baaaaaaa",
+            "password": "badfjsdkljkfl"
+        }
+"""
 import os
 import json
 import time
