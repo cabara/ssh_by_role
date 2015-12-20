@@ -1,21 +1,13 @@
 #!/usr/bin/python
 """
-script excpects to have the following json format files:
-    - ~/.aws/keys:
-        {  
+scripts expects json file at: `~/.aws/keys`
+with content:
+    {  
           "AWSAccessKeyId": "fjasdfjdkslfjaldslkfa",
           "AWSSecretKey": "jfdajlfdksjaljfajklfdjklfdas"
-        }
-    - .slack:
-        {
-            "token": "sdfjkkldjsafjklfdsjkladfsjklfd"
-        }
-    - .bitbucket/credentials:
-        {
-            "user": "baaaaaaa",
-            "password": "badfjsdkljkfl"
-        }
+    }
 """
+
 import os
 import json
 import time
@@ -26,7 +18,6 @@ def write_cache(inventory):
     cache_file = open('./.inventory.cache', 'w')
     cache_file.write(inventory)
     cache_file.close()
-
 
 def get_cache():
     try:
@@ -51,23 +42,7 @@ def get_inventory():
     home = os.environ['HOME']
 
     aws_keys_path = os.path.join(home, '.aws/keys')
-    slack_token_path = os.path.join(home, '.slack')
-    bitbucket_keys_path = os.path.join(home, '.bitbucket/credentials')
-
-
     aws_keys = open_config_file(aws_keys_path)
-    slack_token = open_config_file(slack_token_path)
-    bitbucket_credentials = open_config_file(bitbucket_keys_path)
-
-    cabara_keys_path = os.path.join(home, '.aws/cabara_production')
-    cabara_keys = json.load(open(cabara_keys_path))
-
-    global_vars = {
-        "aws": cabara_keys,
-        "slack": slack_token,
-        "statsd_host": "statsd.cabaraproduction.com",
-        "bitbucket_user": bitbucket_credentials.get('user')
-    }
 
     conn = boto.ec2.connect_to_region(
         "us-west-2",
@@ -96,15 +71,8 @@ def get_inventory():
                     inventory[tag] = {
                         "hosts": []
                     }
-                if tag == "monitor":
-                    global_vars["graphite_host"] = instance.dns_name
-                if tag == 'domains-mongo-data':
-                    global_vars["data_mongo"] = instance.dns_name
                 inventory[tag]["hosts"].append(instance.dns_name)
 
-    for role in inventory.keys():
-        inventory[role]['vars'] = dict(global_vars) # make a copy
-        inventory[role]['vars']['role'] = role
     return json.dumps(inventory, indent=4)
 
 
@@ -114,4 +82,5 @@ if cache:
 else:
     inventory = get_inventory()
     write_cache(inventory)
+
 print(inventory)
