@@ -21,7 +21,8 @@ home_path = os.environ['HOME']
 inventory_script = os.path.join(home_path, '.scripts/ssh_by_role/inventory.py')
 
 parser = argparse.ArgumentParser()
-parser.add_argument('word')
+parser.add_argument('search_tag', help="string with which EC2 host will be looked with")
+
 parser.add_argument('--no-ssh', action='store_true', help="won't ssh just print out the host dns")
 parser.add_argument('--tag', default="role", help="what EC2 tag to search")
 parser.add_argument('--ssh-key', default="~/.ssh/keypair.pem", help="path to the ssh key")
@@ -35,7 +36,7 @@ run_inventory = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subproc
 string_inventory, error= run_inventory.communicate('S\nL\n')
 inventory = json.loads(string_inventory.decode('utf-8'))
 
-tags = list(filter(lambda role: args.word in role, inventory.keys()))
+tags = list(filter(lambda tag: args.search_tag in tag, inventory.keys()))
 
 print_with_indexes(tags)
 
