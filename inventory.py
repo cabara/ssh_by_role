@@ -2,18 +2,23 @@
 """
 scripts expects json file at: `~/.aws/keys`
 with content:
-    {  
-          "AWSAccessKeyId": "fjasdfjdkslfjaldslkfa",
-          "AWSSecretKey": "jfdajlfdksjaljfajklfdjklfdas",
-          "region": "us-west-2"
+    {
+          "AWSAccessKeyId": "<aws access key id>",
+          "AWSSecretKey": "<aws secret key>",
+          "region": "<aws region>"
     }
 """
 
 import os
 import json
 import time
+import argparse
+
 import boto.ec2
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--tag-name', help="what EC2 tag will the inventory be created by")
+args = parser.parse_args()
 
 def write_cache(inventory):
     cache_file = open('./.inventory.cache', 'w')
@@ -64,10 +69,10 @@ def get_inventory():
     )
 
     inventory = {}
-
+    tag_name = args.tag_name or 'role'
     for instance in instances:
-        if instance.tags.get('role'):
-            for tag in instance.tags.get('role', '').split(','):
+        if instance.tags.get(tag_name):
+            for tag in instance.tags.get(tag_name, '').split(','):
                 if not inventory.get(tag):
                     inventory[tag] = {
                         "hosts": []
