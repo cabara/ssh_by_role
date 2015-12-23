@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/python
 """
 scripts expects json file at: `~/.aws/keys`
 with content:

@@ -18,7 +18,7 @@ def print_with_indexes(items):
     ))
 
 home_path = os.environ['HOME']
-inventory_script = os.path.join(home_path, '.scripts/ssh_by_role/inventory.py')
+inventory_script = os.path.join(home_path, '.scripts/ssh_ec2.py/inventory.py')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('search_tag', help="string with which EC2 host will be looked with")
