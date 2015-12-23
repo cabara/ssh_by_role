@@ -50,11 +50,15 @@ def get_inventory():
     aws_keys_path = os.path.join(home, '.aws/keys')
     aws_keys = open_config_file(aws_keys_path)
 
-    conn = boto.ec2.connect_to_region(
-        aws_keys['region'],
-        aws_access_key_id=aws_keys['AWSAccessKeyId'],
-        aws_secret_access_key=aws_keys['AWSSecretKey']
-    )
+    try:
+        conn = boto.ec2.connect_to_region(
+            aws_keys['region1'],
+            aws_access_key_id=aws_keys['AWSAccessKeyId'],
+            aws_secret_access_key=aws_keys['AWSSecretKey']
+        )
+    except KeyError as key:
+        print("missing key %s in ~/.aws/keys" % key)
+        exit(1)
 
     instances = filter(
         lambda instance: instance.dns_name,
