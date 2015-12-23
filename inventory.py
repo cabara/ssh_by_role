@@ -13,6 +13,8 @@ import os
 import json
 import time
 import argparse
+import logging
+import sys
 
 import boto.ec2
 
@@ -52,12 +54,12 @@ def get_inventory():
 
     try:
         conn = boto.ec2.connect_to_region(
-            aws_keys['region1'],
+            aws_keys['region'],
             aws_access_key_id=aws_keys['AWSAccessKeyId'],
             aws_secret_access_key=aws_keys['AWSSecretKey']
         )
     except KeyError as key:
-        print("missing key %s in ~/.aws/keys" % key)
+        logging.exception("missing key %s in ~/.aws/keys" % key)
         exit(1)
 
     instances = filter(
@@ -93,4 +95,4 @@ else:
     inventory = get_inventory()
     write_cache(inventory)
 
-print(inventory)
+sys.stdout.write(inventory)
