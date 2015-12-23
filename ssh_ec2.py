@@ -33,16 +33,24 @@ args = parser.parse_args()
 
 command = [args.inventory_script, '--tag-name', args.tag]
 run_inventory = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-string_inventory, error= run_inventory.communicate('S\nL\n')
+string_inventory, error = run_inventory.communicate('S\nL\n')
+
+if error:
+    raise Exception(error)
+    exit(1)
+
 inventory = json.loads(string_inventory.decode('utf-8'))
 
 tags = list(filter(lambda tag: args.search_tag in tag, inventory.keys()))
 
 print_with_indexes(tags)
 
-print('enter number of %s (defualt 0):' % args.tag)
-index = input()
-index = int(index) if index else 0
+if len(tags) > 1:
+    print('enter number of %s (defualt 0):' % args.tag)
+    index = input()
+    index = int(index) if index else 0
+else:
+    index = 0
 
 tag = tags[index]
 
