@@ -49,8 +49,10 @@ if len(tags) > 1:
     print('enter number of %s (defualt 0):' % args.tag)
     index = input()
     index = int(index) if index else 0
-else:
+elif len(tags) == 1:
     index = 0
+else:
+    raise Exception("no such role")
 
 tag = tags[index]
 
